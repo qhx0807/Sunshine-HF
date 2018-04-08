@@ -16,13 +16,17 @@
                       <Icon type="settings"></Icon>
                       <span>商场数据</span>
                     </MenuItem>
+                    <MenuItem name="Log">
+                      <Icon type="ios-cloud-upload"></Icon>
+                      <span>请求日志</span>
+                    </MenuItem>
                 </Menu>
             </Sider>
             <Layout>
                 <Header :style="{padding: 0}" class="layout-header-bar">
                     <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '20px 20px 0', cursor: 'pointer'}" type="navicon-round" size="24"></Icon>
                     <div class="avatar">
-                      <Avatar style="background-color: #87d068" icon="person" />
+                      <Avatar style="background-color: #eee" icon="person" />
                       <span class="username">Admin</span>
                     </div>
                 </Header>
