@@ -27,7 +27,13 @@
                     <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '20px 20px 0', cursor: 'pointer'}" type="navicon-round" size="24"></Icon>
                     <div class="avatar">
                       <Avatar style="background-color: #eee" icon="person" />
-                      <span class="username">Admin</span>
+                      <Dropdown @on-click="onClickDropdown">
+                        <span class="username">Admin</span>
+                        <DropdownMenu slot="list">
+                          <DropdownItem name="updateUser">修改密码</DropdownItem>
+                          <DropdownItem name="logout">退出登录</DropdownItem>
+                        </DropdownMenu>
+                      </Dropdown>
                     </div>
                 </Header>
                 <Content :style="{margin: '20px', background: '#fff', minHeight: '660px'}">
@@ -59,6 +65,9 @@ export default {
     },
     onClickMenu (e) {
       if (e) this.$router.push({ name: e })
+    },
+    onClickDropdown (e) {
+      alert(e)
     }
   }
 }
@@ -123,7 +132,7 @@ export default {
 }
 .avatar{
   float: right;
-  margin-right: 30px;
+  margin-right: 40px;
 }
 .username{
   font-size: 14px;
