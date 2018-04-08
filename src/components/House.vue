@@ -23,7 +23,7 @@
       </p>
       <div style="text-align:center">
         <Form>
-          <FormItem prop="user">
+          <FormItem>
             <Input type="text" v-model="itemName" placeholder="请输入名称"></Input>
           </FormItem>
         </Form>
@@ -72,6 +72,7 @@ export default {
     addItem () {
       if (!this.itemName) {
         this.$Message.info('请输入名称！')
+        return false
       }
       this.modal_loading = true
       axios.post(apiUrl + '/house', {name: this.itemName})
