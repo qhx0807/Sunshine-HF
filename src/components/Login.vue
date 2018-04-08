@@ -63,6 +63,8 @@ export default {
       }).then(response => {
         this.loading = false
         if (response.data.Data) {
+          sessionStorage.setItem('name', this.formItem.name)
+          sessionStorage.setItem('id', response.data.Data._id)
           this.$router.replace({name: 'Message'})
         } else {
           this.$Message.info('用户名或密码错误！')

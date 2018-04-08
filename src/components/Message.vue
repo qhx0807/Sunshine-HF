@@ -9,13 +9,16 @@
         <Col span="4">
           <Input placeholder="筛选关键字"></Input>
         </Col>
-        <Col span="4">
-          <Button type="primary" icon="ios-search">查询</Button>
+        <Col span="16" style="text-align:right">
+          <!-- <Button type="primary" icon="ios-search">查询</Button> -->
           <Button type="primary" icon="ios-download-outline" @click="exportData" style="margin-left:12px">导出数据</Button>
         </Col>
     </Row>
     <hr class="line">
     <Table size="default" ref="table" :loading="loading" :columns="columns" :data="tableData"></Table>
+    <div style="float: right;padding: 12px 0 0 0 ">
+      <Page :total="totalNum" @on-change="onChangePage" show-total></Page>
+    </div>
   </div>
 </template>
 
@@ -45,6 +48,10 @@ export default {
           key: 'Content'
         },
         {
+          title: '回复',
+          key: 'Reply'
+        },
+        {
           title: '小区',
           key: 'HouseName'
         },
@@ -63,44 +70,34 @@ export default {
       ],
       cityList: [
         {
-          value: 'New York',
-          label: 'New York'
+          value: '业主',
+          label: '业主'
         },
         {
-          value: 'London',
-          label: 'London'
+          value: '商业消费者',
+          label: '商业消费者'
         },
         {
-          value: 'Sydney',
-          label: 'Sydney'
-        },
-        {
-          value: 'Ottawa',
-          label: 'Ottawa'
-        },
-        {
-          value: 'Paris',
-          label: 'Paris'
-        },
-        {
-          value: 'Canberra',
-          label: 'Canberra'
+          value: '合作供方',
+          label: '合作供方'
         }
       ],
+      totalNum: 0
     }
   },
   created () {
-    this.getTableData()
+    this.getTableData(1)
   },
   methods: {
-    getTableData () {
+    getTableData (e) {
       this.loading = true
-      axios.get(apiUrl + '/messages')
+      axios.get(apiUrl + '/messages?page=' + e)
         .then(response => {
           console.log(response)
           this.loading = false
           if(response.status === 200){
             this.tableData = response.data.Data
+            this.totalNum = response.data.Total
           }
         })
         .catch(error => {
@@ -113,6 +110,9 @@ export default {
         filename: '建议留言表',
         original: false
       })
+    },
+    onChangePage (e) {
+      this.getTableData(e)
     }
   }
 }

@@ -41,14 +41,33 @@
                 </Content>
             </Layout>
         </Layout>
+      <Modal v-model="modalShow" width="360">
+        <p slot="header" style="text-align:center">
+          <span>修改密码</span>
+        </p>
+        <div style="text-align:center">
+          <Form>
+            <FormItem>
+              <Input type="text" v-model="newpwd" placeholder="请输入新密码"></Input>
+            </FormItem>
+          </Form>
+        </div>
+        <div slot="footer">
+          <Button type="primary" long :loading="loading" @click="updateUser">保存</Button>
+        </div>
+      </Modal>
     </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
   name: 'Main',
   data () {
     return {
-      isCollapsed: false
+      isCollapsed: true,
+      modalShow: false,
+      newpwd: '',
+      loading: false
     }
   },
   computed: {
@@ -67,7 +86,36 @@ export default {
       if (e) this.$router.push({ name: e })
     },
     onClickDropdown (e) {
-      alert(e)
+      if (e === 'updateUser') {
+        this.modalShow = true
+      } else if (e === 'logout') {
+        this.$router.replace({name: 'Login'})
+      }
+    },
+    updateUser () {
+      if (!this.newpwd) {
+        this.$Message.info('请输入！')
+        return false
+      }
+      let obj = {
+        id: sessionStorage.id,
+        name: sessionStorage.name,
+        pwd: this.newpwd
+      }
+      axios.put(apiUrl + '/updateUser', obj)
+          .then(response => {
+          console.log(response)
+          this.loading = false
+          if(response.data.OK === 'ok'){
+            this.$Message.info('修改成功！请重新登录~~')
+            this.modalShow = false
+            this.$router.replace({name: 'Login'})
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          this.loading = false
+        })
     }
   }
 }
