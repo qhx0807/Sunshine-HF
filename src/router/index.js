@@ -5,6 +5,7 @@ import Main from '@/components/Main'
 import Message from '@/components/Message'
 import Market from '@/components/Market'
 import House from '@/components/House'
+import Log from '@/components/Log'
 
 Vue.use(Router)
 
@@ -31,6 +32,11 @@ export default new Router({
           path: '/House',
           name: 'House',
           component: House
+        },
+        {
+          path: '/Log',
+          name: 'Log',
+          component: Log
         }
       ]
     }
