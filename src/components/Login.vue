@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'login',
   data () {
@@ -51,7 +52,25 @@ export default {
         this.$Message.info('请输入用户密码')
         return false
       }
-      this.$router.replace({name: 'Message'})
+      this.loading = true
+      axios({
+        method: 'post',
+        url: apiUrl + '/login',
+        data: {
+          name: this.formItem.name,
+          pwd: this.formItem.password
+        }
+      }).then(response => {
+        this.loading = false
+        if (response.data.Data) {
+          this.$router.replace({name: 'Message'})
+        } else {
+          this.$Message.info('用户名或密码错误！')
+        }
+      }).catch(error => {
+        this.loading = false
+        console.log(error)
+      })
     }
   }
 }
