@@ -9,8 +9,7 @@ import House from '@/components/House'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: '/',
       name: 'Login',
       component: Login
@@ -18,8 +17,7 @@ export default new Router({
     {
       path: '/main',
       component: Main,
-      children: [
-        {
+      children: [{
           path: '/Message',
           name: 'Message',
           component: Message
@@ -33,7 +31,7 @@ export default new Router({
           path: '/House',
           name: 'House',
           component: House
-        },
+        }
       ]
     }
   ]

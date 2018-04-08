@@ -20,7 +20,7 @@
             </Sider>
             <Layout>
                 <Header :style="{padding: 0}" class="layout-header-bar">
-                    <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '20px 20px 0'}" type="navicon-round" size="24"></Icon>
+                    <Icon @click.native="collapsedSider" :class="rotateIcon" :style="{margin: '20px 20px 0', cursor: 'pointer'}" type="navicon-round" size="24"></Icon>
                     <div class="avatar">
                       <Avatar style="background-color: #87d068" icon="person" />
                       <span class="username">Admin</span>
@@ -45,7 +45,7 @@ export default {
     rotateIcon () {
       return ['menu-icon', this.isCollapsed ? 'rotate-icon' : '']
     },
-    menuitemClasses() {
+    menuitemClasses () {
       return ['menu-item', this.isCollapsed ? 'collapsed-menu' : '']
     }
   },
@@ -105,6 +105,7 @@ export default {
   transition: font-size 0.2s ease, transform 0.2s ease;
   vertical-align: middle;
   font-size: 16px;
+  cursor: pointer;
 }
 .collapsed-menu span {
   width: 0px;
