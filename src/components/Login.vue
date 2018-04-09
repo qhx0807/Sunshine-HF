@@ -71,6 +71,7 @@ export default {
         }
       }).catch(error => {
         this.loading = false
+        this.$Message.info('登录失败，请检查网络！')
         console.log(error)
       })
     }
