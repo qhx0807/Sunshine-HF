@@ -12,6 +12,9 @@
 
 <body>
   <style>
+    [v-cloak]{
+      display: none;
+    }
     #app{
       padding: 12px;
       font-family: '微软雅黑';
@@ -62,7 +65,7 @@
     }
     .submit-btn{
       width: 100%;
-      height: 35px;
+      height: 40px;
       border: none;
       outline: none;
       background-color: deepskyblue;
@@ -112,7 +115,7 @@
       width: 79px;
     }
   </style>
-  <div id="app">
+  <div id="app" v-cloak>
     <div class="item" style="margin-top: 15px;">
       <p class="label">
         <span class="ness">*</span>
@@ -144,6 +147,13 @@
         <span>合作项目</span>
       </p>
       <input v-model="formData.ProjectName" type="text" placeholder="请输入合作项目">
+    </div>
+    <div class="item" v-if="formData.Type=='合作供方'">
+      <p class="label">
+        <span class="ness">*</span>
+        <span>合作内容</span>
+      </p>
+      <input v-model="formData.ProjectContent" type="text" placeholder="请输入合作内容">
     </div>
     <div class="item" v-if="formData.Type=='商场消费者'">
       <p class="label">
@@ -207,7 +217,7 @@
     <div class="msg-content">
       <div class="org-msg">
         <div class="msg-left">
-          <img src="https://gw.alicdn.com/tps/TB1W_X6OXXXXXcZXVXXXXXXXXXX-400-400.png" alt="">
+          <img :src="userinfoData.headimgurl" alt="">
         </div>
         <div class="msg-right">
           <div>
@@ -231,6 +241,13 @@
               <small>&nbsp;&nbsp;--&nbsp;2017-09-12</small>
             </div>
         </div>
+      </div>
+    </div>
+    <div id="loadingToast" v-if="submitLoading">
+      <div class="weui-mask_transparent"></div>
+      <div class="weui-toast">
+          <i class="weui-loading weui-icon_toast"></i>
+          <p class="weui-toast__content">提交数据...</p>
       </div>
     </div>
   </div>
@@ -262,6 +279,7 @@
           HouseName: '',
           MarketName: '',
           ProjectName: '',
+          ProjectContent: '',
           DoorNumber:'',
           Openid: '',
           Name: '',
@@ -269,10 +287,15 @@
           Date: '',
           Content: '',
           Picture: [],
-          Reply: []
-        }
+          Reply: [],
+          Status: '未读'
+        },
+        submitLoading: false,
+        userinfoData: {},
+        userMsgsData: []
       },
       created () {
+        this.getUserInfo()
         this.getHouseData()
         this.getMarketData()
       },
@@ -302,7 +325,21 @@
             })
         },
         submitHandler () {
-          alert(1)
+          if (!this.formData.Name || !this.formData.Tel || !this.formData.Content || !this.formData.Type) {
+            alert('请填写相关信息！')
+            return false
+          }
+          if (!this.formData.HouseName && !this.formData.MarketName && !this.formData.ProjectName && !this.formData.DoorNumber) {
+            alert('请填写相关信息！')
+            return false
+          }
+          axios.post(this.apiUrl +'/messages', this.formData)
+            .then(response => {
+              console.log(response)
+            })
+            .catch(error => {
+              console.log(error)
+            })
         },
         onUploadHandler () {
           var Input = document.querySelector("#uploaderInput")
@@ -323,7 +360,45 @@
             .catch(error => {
               console.log(error)
             })
-        }
+        },
+        getUserInfo () {
+          var code = this.getQueryString('code')
+          if(!code){
+            return false
+          }
+          axios.get(this.apiUrl +'/userinfo?code=' + code)
+            .then(response => {
+              if (response.data.Data) {
+                var obj = JSON.parse(response.data.Data)
+                this.userinfoData = obj
+                this.getMyMsgs(obj.opid)
+              }else {
+                alert('获取信息失败！')
+              }
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        },
+        getQueryString (name) {
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i")
+          var r = window.location.search.substr(1).match(reg)
+          if (r != null) return unescape(r[2])
+          return null
+        },
+        getMyMsgs (opid) {
+          axios.get(this.apiUrl +'/onemsgs?openid=' + opid)
+            .then(response => {
+              console.log(response)
+              if(response.data.Data){
+                this.userMsgsData = response.data.Data
+              }
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        },
+
       }
     })
   </script>
