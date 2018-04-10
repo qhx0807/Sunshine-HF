@@ -31,7 +31,8 @@
               <span class="msg-content">{{curData.Tel}}</span>
               <span class="msg-content">{{curData.Type}}</span>
               <span class="msg-content">{{curData.HouseName }}</span>
-              <span class="msg-content">{{curData.ProjectName }}</span>&nbsp;&nbsp;
+              <span class="msg-content">{{curData.ProjectName }}</span>
+              <span class="msg-content">{{curData.ProjectContent }}</span>&nbsp;&nbsp;
               <span class="msg-content">{{curData.Date }}</span>
             </Col>
           </Row>
@@ -99,6 +100,21 @@ export default {
         {
           title: '内容',
           key: 'Content'
+        },
+        {
+          title: '图片',
+          key: 'Picture',
+          render: (h, params) => {
+            return h('div',
+              params.row.Picture.map(item => {
+                return h('img',{
+                  attrs: {
+                    src: apiUrl+'/'+item.filename
+                  }
+                })
+              })
+            )
+          }
         },
         {
           title: '回复',
