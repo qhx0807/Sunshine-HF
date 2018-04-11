@@ -18,11 +18,13 @@ export default {
       columns: [
         {
           title: 'API',
-          key: 'api'
+          key: 'api',
+          width: 100,
         },
         {
           title: 'method',
-          key: 'method'
+          key: 'method',
+           width: 100,
         },
         {
           title: '参数',
@@ -30,7 +32,8 @@ export default {
         },
         {
           title: '时间',
-          key: 'time'
+          key: 'time',
+           width: 200,
         }
       ],
       totalNum: 0,
