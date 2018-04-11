@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>投诉建议</title>
   <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
-  <link rel="stylesheet" href="http://at.alicdn.com/t/font_620896_gjdfg1ez8478pvi.css">
+  <link rel="stylesheet" href="http://at.alicdn.com/t/font_620896_sia6q1ob0y919k9.css">
 </head>
 
 <body>
@@ -15,239 +15,13 @@
     [v-cloak]{
       display: none;
     }
-    #app{
-      padding: 12px;
-      font-family: '微软雅黑';
-    }
-    .ness{
-      color: red;
-    }
-    .label{
-      font-size: 12px;
-      margin-bottom: 2px;
-    }
-    .item{
-      padding: 0 10px;
-      margin-top: 25px;
-      overflow: hidden;
-    }
-    select{
-      outline: none;
-      border: none;
-      border-bottom: 1px solid #ddd;
-      user-select: none;
-      width: 100%;
-      padding: 4px 10px;
-      font-size: 12px;
-    }
-    input{
-      outline: none;
-      border: none;
-      border-bottom: 1px solid #ddd;
-      user-select: none;
-      width: 100%;
-      padding: 4px 10px;
-      font-size: 12px;
-      box-sizing: border-box;
-    }
-    textarea{
-      outline: none;
-      border: none;
-      border: 1px solid #ddd;
-      user-select: none;
-      width: 100%;
-      padding: 4px 10px;
-      font-size: 12px;
-      box-sizing: border-box;
-      height: 140px;
-      margin-top: 5px;
-      font-family: '微软雅黑';
-    }
-    .submit-btn{
-      width: 100%;
-      height: 40px;
-      border: none;
-      outline: none;
-      background-color: deepskyblue;
-      color: #fff;
-      font-size: 14px;
-    }
-    .my-msg{
-      margin-top: 50px;
-      text-align: center;
-      font-size: 15px;
-      font-weight: 600;
-      color: #ccc;
-    }
-    .no-msg{
-      margin-top: 20px;
-      text-align: center;
-      font-size: 12px;
-      color: #ddd;
-    }
-    .msg-content{
-      margin-top: 20px;
-      font-size: 12px;
-    }
-    .msg-left{
-      width: 40px;
-      float: left;
-    }
-    .msg-left img{
-      width:35px;
-      height:35px;
-      border-radius: 50%;
-    }
-    .msg-right{
-      color: #444;
-      overflow: hidden;
-    }
-    .msg-right p{
-      font-size: 12px;
-      line-height: 18px;
-    }
-    .reply{
-      background-color: #f8f8f8;
-      margin-left: 40px;
-    }
-    .up-img{
-      height: 79px;
-      width: 79px;
-    }
   </style>
   <div id="app" v-cloak>
-    <div class="item" style="margin-top: 15px;">
-      <p class="label">
-        <span class="ness">*</span>
-        <span>请选择投诉建议类型</span>
-      </p>
-      <select v-model="formData.Type">
-        <option v-for="(item, index) in options" :key="index" :value="item.value">{{item.name}}</option>
-      </select>
-    </div>
-    <div class="item" v-if="formData.Type=='业主'">
-      <p class="label">
-        <span class="ness">*</span>
-        <span>请选择小区</span>
-      </p>
-      <select v-model="formData.HouseName">
-        <option v-for="(item, index) in houseData" :key="index" :value="item.name">{{item.name}}</option>
-      </select>
-    </div>
-    <div class="item" v-if="formData.Type=='业主'">
-      <p class="label">
-        <span class="ness">*</span>
-        <span>门牌号码</span>
-      </p>
-      <input v-model="formData.DoorNumber" type="text" placeholder="请输入门牌号码">
-    </div>
-    <div class="item" v-if="formData.Type=='合作供方'">
-      <p class="label">
-        <span class="ness">*</span>
-        <span>合作项目</span>
-      </p>
-      <input v-model="formData.ProjectName" type="text" placeholder="请输入合作项目">
-    </div>
-    <div class="item" v-if="formData.Type=='合作供方'">
-      <p class="label">
-        <span class="ness">*</span>
-        <span>合作内容</span>
-      </p>
-      <input v-model="formData.ProjectContent" type="text" placeholder="请输入合作内容">
-    </div>
-    <div class="item" v-if="formData.Type=='商场消费者'">
-      <p class="label">
-        <span class="ness">*</span>
-        <span>请选择消费商场</span>
-      </p>
-      <select  v-model="formData.MarketName">
-        <option v-for="(item, index) in marketData" :key="index" :value="item.name">{{item.name}}</option>
-      </select>
-    </div>
-    <div class="item">
-      <p class="label">
-        <span class="ness">*</span>
-        <span>您的姓名</span>
-      </p>
-      <input v-model="formData.Name" type="text" placeholder="请输入您的姓名">
-    </div>
-    <div class="item">
-      <p class="label">
-        <span class="ness">*</span>
-        <span>您的联系电话</span>
-      </p>
-      <input v-model="formData.Tel" type="tel" placeholder="请输入您的电话号码">
-    </div>
-    <div class="item">
-      <p class="label">
-        <span class="ness">*</span>
-        <span>反馈内容</span>
-      </p>
-      <textarea v-model="formData.Content" placeholder="请输入投诉建议内容"></textarea>
-    </div>
-    <div class="item" style="margin-top: 10px">
-      <p class="label">
-        <span>上传图片</span>
-      </p>
-      <div class="weui-uploader__bd">
-        <ul class="weui-uploader__files" id="uploaderFiles">
-            <li v-for="(item,index) in formData.Picture" :key="index" class="weui-uploader__file">
-              <img class="up-img" :src="apiUrl+'/'+item.filename" alt="">
-            </li>
-        </ul>
-        <div class="weui-uploader__input-box">
-            <input id="uploaderInput" @change="onUploadHandler" class="weui-uploader__input" type="file" accept="image/*" />
-        </div>
-    </div>
-    </div>
-    <div class="item">
-      <button class="submit-btn" @click="submitHandler">提交</button>
-    </div>
-    <div class="my-msg">
-      <i class="iconfont icon-liuyanfill"></i>
-      <span>我的留言</span>
-      <div class="weui-loadmore weui-loadmore_line weui-loadmore_dot" style="margin-top: 10px">
-          <span class="weui-loadmore__tips"></span>
-      </div>
-    </div>
-
-    <!-- <div class="no-msg">
-        <span>暂无</span>
-      </div> -->
-    <div class="msg-content">
-      <div class="org-msg">
-        <div class="msg-left">
-          <img :src="userinfoData.headimgurl" alt="">
-        </div>
-        <div class="msg-right">
-          <div>
-            <p>测试名字</p>
-            <p style="color: #ccc">2017-12-12 09:12</p>
-          </div>
-          <div>ssssssssssssss</div>
-          <div></div>
-        </div>
-      </div>
-      <div class="reply">
-        <div style="margin-top: 12px">
-          <div style="color: #bbb;margin-top: 5px">
-            <span>测试名字：</span>
-            <span>ssssssssssssss</span>
-            <small>&nbsp;&nbsp;--&nbsp;2017-09-12</small>
-          </div>
-          <div style="color: #bbb;margin-top: 5px">
-              <span>测试名字：</span>
-              <span>ssssssssssssss</span>
-              <small>&nbsp;&nbsp;--&nbsp;2017-09-12</small>
-            </div>
-        </div>
-      </div>
-    </div>
     <div id="loadingToast" v-if="submitLoading">
       <div class="weui-mask_transparent"></div>
       <div class="weui-toast">
           <i class="weui-loading weui-icon_toast"></i>
-          <p class="weui-toast__content">提交数据...</p>
+          <p class="weui-toast__content">数据加载中</p>
       </div>
     </div>
   </div>
@@ -257,110 +31,14 @@
     var app = new Vue({
       el: '#app',
       data: {
-        options: [
-          {
-            name: '业主',
-            value: '业主'
-          },
-          {
-            name: '商场消费者',
-            value: '商场消费者'
-          },
-          {
-            name: '合作供方',
-            value: '合作供方'
-          }
-        ],
-        houseData: [],
-        marketData: [],
-        apiUrl: 'http://localhost:3000',
-        formData: {
-          Type: '业主',
-          HouseName: '',
-          MarketName: '',
-          ProjectName: '',
-          ProjectContent: '',
-          DoorNumber:'',
-          Openid: '',
-          Name: '',
-          Tel: '',
-          Date: '',
-          Content: '',
-          Picture: [],
-          Reply: [],
-          Status: '未读'
-        },
-        submitLoading: false,
         userinfoData: {},
-        userMsgsData: []
+        submitLoading: true,
+        apiUrl: 'http://localhost:3000'
       },
       created () {
         this.getUserInfo()
-        this.getHouseData()
-        this.getMarketData()
       },
       methods: {
-        getHouseData () {
-          var t = this
-          axios.get(this.apiUrl + '/house')
-            .then(function(response){
-              if(response.status === 200){
-                t.houseData = response.data.Data
-              }
-            })
-            .catch(function(error){
-              console.log(error)
-            })
-        },
-        getMarketData () {
-          var t = this
-          axios.get(this.apiUrl + '/market')
-            .then(function(response){
-              if(response.status === 200){
-                t.marketData = response.data.Data
-              }
-            })
-            .catch(function(error){
-              console.log(error)
-            })
-        },
-        submitHandler () {
-          if (!this.formData.Name || !this.formData.Tel || !this.formData.Content || !this.formData.Type) {
-            alert('请填写相关信息！')
-            return false
-          }
-          if (!this.formData.HouseName && !this.formData.MarketName && !this.formData.ProjectName && !this.formData.DoorNumber) {
-            alert('请填写相关信息！')
-            return false
-          }
-          axios.post(this.apiUrl +'/messages', this.formData)
-            .then(response => {
-              console.log(response)
-            })
-            .catch(error => {
-              console.log(error)
-            })
-        },
-        onUploadHandler () {
-          var Input = document.querySelector("#uploaderInput")
-          var url = this.apiUrl
-          var files = Input.files
-          var fd = new FormData()
-          fd.append('file', files[0])
-          var config = {
-            headers:{'Content-Type':'multipart/form-data'}
-          }
-          axios.post(url + '/upload', fd, config)
-            .then(response => {
-              console.log(response)
-              if(response.data.Data){
-                this.formData.Picture.push(response.data.Data)
-              }
-            })
-            .catch(error => {
-              console.log(error)
-            })
-        },
         getUserInfo () {
           var code = this.getQueryString('code')
           if(!code){
@@ -370,8 +48,10 @@
             .then(response => {
               if (response.data.Data) {
                 var obj = JSON.parse(response.data.Data)
+                sessionStorage.setItem('user', response.data.Data)
                 this.userinfoData = obj
-                this.getMyMsgs(obj.opid)
+                console.log(obj)
+                window.location.href="/message.html"
               }else {
                 alert('获取信息失败！')
               }
@@ -385,18 +65,6 @@
           var r = window.location.search.substr(1).match(reg)
           if (r != null) return unescape(r[2])
           return null
-        },
-        getMyMsgs (opid) {
-          axios.get(this.apiUrl +'/onemsgs?openid=' + opid)
-            .then(response => {
-              console.log(response)
-              if(response.data.Data){
-                this.userMsgsData = response.data.Data
-              }
-            })
-            .catch(error => {
-              console.log(error)
-            })
         },
 
       }
