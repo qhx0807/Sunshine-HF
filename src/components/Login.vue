@@ -17,7 +17,7 @@
               <Input v-model="formItem.name" placeholder="用户名"/>
             </FormItem>
             <FormItem>
-              <Input v-model="formItem.password" @on-enter="loginHandler" placeholder="密码"/>
+              <Input type="password" v-model="formItem.password" @on-enter="loginHandler" placeholder="密码"/>
             </FormItem>
             <FormItem>
               <Button type="info" :loading="loading" @click="loginHandler" long>登录</Button>
