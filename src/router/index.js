@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/components/Login'
-import Main from '@/components/Main'
-import Message from '@/components/Message'
-import Market from '@/components/Market'
-import House from '@/components/House'
-import Log from '@/components/Log'
+
+const  Login = r => require.ensure( [], () => r (require('@/components/Login')))
+const  Main = r => require.ensure( [], () => r (require('@/components/Main')))
+const  Message = r => require.ensure( [], () => r (require('@/components/Message')))
+const  Market = r => require.ensure( [], () => r (require('@/components/Market')))
+const  House = r => require.ensure( [], () => r (require('@/components/House')))
+const  Log = r => require.ensure( [], () => r (require('@/components/Log')))
 
 Vue.use(Router)
 
