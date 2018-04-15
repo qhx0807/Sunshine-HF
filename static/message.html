@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>投诉建议</title>
   <link rel="stylesheet" href="https://res.wx.qq.com/open/libs/weui/1.1.2/weui.min.css">
@@ -23,7 +23,7 @@
       color: red;
     }
     .label{
-      font-size: 12px;
+      font-size: 14px;
       margin-bottom: 2px;
     }
     .item{
@@ -38,7 +38,7 @@
       user-select: none;
       width: 100%;
       padding: 4px 10px;
-      font-size: 12px;
+      font-size: 14px;
     }
     input{
       outline: none;
@@ -47,7 +47,7 @@
       user-select: none;
       width: 100%;
       padding: 4px 10px;
-      font-size: 12px;
+      font-size: 14px;
       box-sizing: border-box;
     }
     textarea{
@@ -57,7 +57,7 @@
       user-select: none;
       width: 100%;
       padding: 4px 10px;
-      font-size: 12px;
+      font-size: 14px;
       box-sizing: border-box;
       height: 140px;
       margin-top: 5px;
@@ -82,13 +82,13 @@
     .no-msg{
       margin-top: 20px;
       text-align: center;
-      font-size: 12px;
+      font-size: 14px;
       color: #ddd;
     }
     .msg-content{
       position: relative;
       margin-top: 20px;
-      font-size: 12px;
+      font-size: 14px;
       padding-bottom: 10px;
       border-bottom: 1px solid #eee;
     }
@@ -188,7 +188,7 @@
         <span class="ness">*</span>
         <span>请选择投诉建议类型</span>
       </p>
-      <select v-model="formData.Type">
+      <select v-model="formData.Type" @change="changeType">
         <option v-for="(item, index) in options" :key="index" :value="item.value">{{item.name}}</option>
       </select>
     </div>
@@ -324,7 +324,7 @@
       </div>
     </div>
     <div class="rep-box" v-show="repShow">
-        <textarea id="repInput" v-model="replyMessage" style="height: 80px;"  placeholder="回复管理员@阳光宏帆"></textarea>
+        <textarea id="repInput" v-model="replyMessage" style="height: 100px;"  placeholder="回复管理员@阳光宏帆"></textarea>
         <div class="btn-box">
           <button style="margin-right:8px;" @click="onRepMsgHandler">提交</button>
           <button style="background: #ddd;" @click="onClickCancel">取消</button>
@@ -353,7 +353,7 @@
         ],
         houseData: [],
         marketData: [],
-        apiUrl: 'http://localhost:3000',
+        apiUrl: 'http://120.77.169.165:3000',
         formData: {
           Type: '业主',
           HouseName: '',
@@ -396,6 +396,7 @@
             .then(function(response){
               if(response.status === 200){
                 t.houseData = response.data.Data
+                // t.formData.HouseName = response.data.Data[0].name
               }
             })
             .catch(function(error){
@@ -533,6 +534,13 @@
               console.log(error)
               this.submitLoading = false
             })
+        },
+        changeType(e){
+          this.formData.HouseName =  ''
+          this.formData.MarketName =  ''
+          this.formData.ProjectName =  ''
+          this.formData.ProjectContent =  ''
+          this.formData.DoorNumber = ''
         }
       }
     })
