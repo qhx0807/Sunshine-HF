@@ -7,6 +7,8 @@ const  Message = r => require.ensure( [], () => r (require('@/components/Message
 const  Market = r => require.ensure( [], () => r (require('@/components/Market')))
 const  House = r => require.ensure( [], () => r (require('@/components/House')))
 const  Log = r => require.ensure( [], () => r (require('@/components/Log')))
+const  AdminTel = r => require.ensure( [], () => r (require('@/components/AdminTel')))
+const  AutoReply = r => require.ensure( [], () => r (require('@/components/AutoReply')))
 
 Vue.use(Router)
 
@@ -38,6 +40,16 @@ export default new Router({
           path: '/Log',
           name: 'Log',
           component: Log
+        },
+        {
+          path: '/AdminTel',
+          name: 'AdminTel',
+          component: AdminTel
+        },
+        {
+          path: '/AutoReply',
+          name: 'AutoReply',
+          component: AutoReply
         }
       ]
     }
