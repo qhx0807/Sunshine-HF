@@ -6,13 +6,13 @@
     </Spin>
     <Row>
       <Col span="3" v-for="item in tableData" :key="item._id" style="padding:10px 10px 0 0">
-        <Card style="cursor:pointer" @click.native="onClickDel(item._id)">
+        <Card style="cursor:pointer;height:100px" @click.native="onClickDel(item._id)">
           <p class="item-name">{{item.name}}</p>
           <div class="del"><Icon type="android-close"></Icon></div>
         </Card>
       </Col>
       <Col span="3" style="padding:10px 10px 0 0">
-        <Card style="cursor:pointer" @click.native="onClickAddHandler">
+        <Card style="cursor:pointer;height:100px" @click.native="onClickAddHandler">
           <p class="item-name"><Icon type="plus"></Icon></p>
         </Card>
       </Col>
@@ -128,6 +128,7 @@ export default {
 }
 .item-name{
   text-align: center;
+  padding-top: 20px;
 }
 .del{
   position: absolute;

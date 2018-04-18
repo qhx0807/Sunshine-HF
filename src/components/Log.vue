@@ -1,6 +1,6 @@
 <template>
   <div class="msg">
-    <Table size="default" ref="table" :loading="loading" :columns="columns" :data="tableData"></Table>
+    <Table size="small" ref="table" :loading="loading" :columns="columns" :data="tableData"></Table>
     <div style="float: right;padding: 12px 0 0 0 ">
       <Page :total="totalNum" @on-change="onChangePage" show-total></Page>
     </div>

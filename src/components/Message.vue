@@ -138,7 +138,7 @@ export default {
           key: 'Content'
         },
         {
-          width: 100,
+          width: 140,
           title: '图片',
           key: 'Picture',
           render: (h, params) => {
