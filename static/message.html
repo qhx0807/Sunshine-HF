@@ -176,6 +176,46 @@
     .isRep{
       padding-bottom: 150px!important;
     }
+    .submit-btn[disabled]{
+      background-color: #ddd;
+      pointer-events: none;
+    }
+    .tklist{
+      padding: 12px 10px;
+      overflow: hidden;
+      border: 1px solid #eee;
+      background-color: #f8f8f8;
+    }
+    .tklist p{
+      font-size: 11px;
+      line-height: 19px;
+      color: rgb(80, 79, 79);
+    }
+    .weui-agree__text{
+      font-size: 12px;
+    }
+    .weui-agree__checkbox:checked:before{
+      color: deepskyblue;
+      font-weight: 600;
+    }
+    input[type="text"]:focus,input[type="tel"]:focus{
+      border-bottom:1px solid #444;
+    }
+    textarea:focus{
+      border:1px solid #444;
+    }
+    .get-code{
+      font-size: 13px;
+      color: #2d8cf0;
+      position: absolute;
+      right: 8px;
+      top: 28px;
+      z-index: 999;
+    }
+    .get-code.pendding{
+      color: #ddd;
+      pointer-events: none;
+    }
   </style>
   <div id="app" v-cloak :class="{'isRep' : repShow}">
     <div class="item tip" style="margin-top: 10px;">
@@ -238,12 +278,20 @@
       </p>
       <input v-model="formData.Name" type="text" placeholder="请输入您的姓名">
     </div>
-    <div class="item">
+    <div class="item" style="position: relative;">
       <p class="label">
         <span class="ness">*</span>
         <span>您的联系电话</span>
       </p>
-      <input v-model="formData.Tel" type="tel" placeholder="请输入您的电话号码">
+      <input v-model="formData.Tel" maxlength="11" oninput="if(value.length>11)value=value.slice(0,11)" type="tel" placeholder="请输入您的电话号码">
+     <span class="get-code" @click="senSmsCode" :class="{'pendding':sendSms}">{{codeTips}}</span>
+    </div>
+    <div class="item" v-show="beSmsCode">
+      <p class="label">
+        <span class="ness">*</span>
+        <span>验证码</span>
+      </p>
+      <input type="number" v-model="smsCode" maxlength="6" oninput="if(value.length>6)value=value.slice(0,6)" placeholder="请输入验证码">
     </div>
     <div class="item">
       <p class="label">
@@ -268,7 +316,20 @@
     </div>
     </div>
     <div class="item">
-      <button class="submit-btn" @click="submitHandler">提交</button>
+      <div class="tklist">
+        <p>一、本人提供的个人信息真实、无误、有效。</p>
+        <p>二、本人提供的投诉、建议内容真实，愿意配合进行调查，并提供有效证据。</p>
+        <p>三、本人承诺：若提供信息、资料有不实之处，愿负相应的法律责任，并承担由此产生的一切后果。</p>
+      </div>
+    </div>
+    <label for="weuiAgree" class="weui-agree">
+        <input id="weuiAgree" style="padding: 0px" v-model="disabledBtn" type="checkbox" class="weui-agree__checkbox">
+        <span class="weui-agree__text">
+            阅读并同意<a href="javascript:void(0);">上述条款</a>
+        </span>
+    </label>
+    <div class="item" style="margin-top: 15px;">
+      <button class="submit-btn" :disabled="!disabledBtn" @click="submitHandler">提交</button>
     </div>
     <div class="my-msg">
       <i class="iconfont icon-liuyanfill"></i>
@@ -331,6 +392,13 @@
         </div>
     </div>
   </div>
+  <div id="smsToast" v-show="smsSuccess">
+    <div class="weui-mask_transparent"></div>
+    <div class="weui-toast">
+        <i class="weui-icon-success-no-circle weui-icon_toast"></i>
+        <p class="weui-toast__content">已发送！</p>
+    </div>
+  </div>
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
@@ -353,7 +421,10 @@
         ],
         houseData: [],
         marketData: [],
-        apiUrl: 'http://120.77.169.165:3000',
+        codeTips: '获取验证码',
+        sendSms: false,
+        // apiUrl: 'http://120.77.169.165:3000',
+        apiUrl: 'http://localhost:3000',
         formData: {
           Type: '业主',
           HouseName: '',
@@ -377,6 +448,10 @@
         repShow: false,
         replyMessage: '',
         repId: '',
+        disabledBtn: true,
+        smsSuccess: false,
+        smsCode: '',
+        beSmsCode: '',
         seeImgUrl: 'http://thirdwx.qlogo.cn/mmopen/vi_32/jxW2GPLfXcXKrj8DCAkuicLF75uep4yYyxVGywszZAuLLWA2a5oCAkdkrp2c9Qcbu0M4icib2LpNfZmU3eicG316Rg/132',
       },
       created () {
@@ -416,15 +491,61 @@
             })
         },
         submitHandler () {
+          if(this.beSmsCode != this.smsCode){
+            alert("验证码错误")
+            return false
+          }
+
+          var reg = re = /^1\d{10}$/
+          if(!this.formData.Name){
+            alert('请输入您的姓名')
+            return false
+          }
+
+          if(!this.formData.Content){
+            alert('请输入留言内容')
+            return false
+          }
+
+          if(!reg.test(this.formData.Tel)){
+            alert('请输入正确的手机号')
+
+          }
+
+          if(this.formData.Type == '业主'){
+            if(!this.formData.HouseName){
+              alert('请选择小区名称')
+              return false
+            }
+            if(!this.formData.DoorNumber){
+              alert('请填写门牌号')
+              return false
+            }
+            if(!this.formData.DoorNumber){
+              alert('请填写门牌号')
+              return false
+            }
+          }
+
+          if(this.formData.Type == '商场消费者'){
+            if(!this.formData.MarketName){
+              alert('请选择商场名称')
+              return false
+            }
+          }
+
+          if(this.formData.Type == '合作供方'){
+            if(!this.formData.ProjectName){
+              alert('请输入合作项目')
+              return false
+            }
+            if(!this.formData.ProjectContent){
+              alert('请输入合作内容')
+              return false
+            }
+          }
+
           this.formData.Date = new Date().toLocaleString()
-          if (!this.formData.Name || !this.formData.Tel || !this.formData.Content || !this.formData.Type) {
-            alert('请填写相关信息！')
-            return false
-          }
-          if (!this.formData.HouseName && !this.formData.MarketName && !this.formData.ProjectName && !this.formData.DoorNumber) {
-            alert('请填写相关信息！')
-            return false
-          }
           this.submitLoading = true
           axios.post(this.apiUrl +'/messages', this.formData)
             .then(response => {
@@ -541,6 +662,46 @@
           this.formData.ProjectName =  ''
           this.formData.ProjectContent =  ''
           this.formData.DoorNumber = ''
+        },
+        senSmsCode(){
+          var reg = re = /^1\d{10}$/
+          if(!reg.test(this.formData.Tel)){
+            alert('请输入正确的手机号')
+            return false
+          }
+          this.beSmsCode = ''
+          this.smsCode = ''
+
+          var t = this
+          var time = 10
+          axios.get(this.apiUrl +'/verifycode?mobile=' + this.formData.Tel)
+            .then(response => {
+              console.log(response)
+              if(response.data.code){
+                t.beSmsCode = response.data.code
+                t.smsSuccess = true
+                t.sendSms = true
+                setTimeout(function(){
+                  t.smsSuccess = false
+                }, 1000)
+                t.codeTips = `${time}s后重新发送`
+                var er = setInterval(function(){
+                  time -= 1
+                  if(time>-1){
+                    t.codeTips = `${time}s后重新发送`
+                  }else{
+                    t.codeTips = `获取验证码`
+                    t.sendSms = false
+                    clearInterval(er)
+                  }
+                },1000)
+              }else{
+                alert('获取验证码失败')
+              }
+            })
+            .catch(error => {
+              console.log(error)
+            })
         }
       }
     })
