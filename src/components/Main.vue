@@ -16,6 +16,14 @@
                       <Icon type="settings"></Icon>
                       <span>商场数据</span>
                     </MenuItem>
+                     <MenuItem name="AdminTel">
+                      <Icon type="ios-telephone"></Icon>
+                      <span>管理员电话</span>
+                    </MenuItem>
+                     <MenuItem name="AutoReply">
+                      <Icon type="ios-chatboxes"></Icon>
+                      <span>自动回复</span>
+                    </MenuItem>
                     <MenuItem name="Log">
                       <Icon type="ios-cloud-upload"></Icon>
                       <span>请求日志</span>
@@ -156,7 +164,7 @@ export default {
   display: inline-block;
   overflow: hidden;
   width: 69px;
-  text-overflow: ellipsis;
+  // text-overflow: ellipsis;
   white-space: nowrap;
   vertical-align: bottom;
   transition: width 0.2s ease 0.2s;
