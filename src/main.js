@@ -8,7 +8,8 @@ import './theme/index.less'
 
 Vue.use(iview)
 
-global.apiUrl = 'http://localhost:3000'
+global.apiUrl = 'http://120.77.169.165:3000'
+// global.apiUrl = 'http://localhost:3000'
 
 Vue.config.productionTip = false
 
