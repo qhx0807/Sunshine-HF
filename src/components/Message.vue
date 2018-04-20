@@ -7,7 +7,7 @@
           </Select>
         </Col>
         <Col span="4">
-          <Input placeholder="筛选关键字"></Input>
+          <Input v-model="keyWord" placeholder="筛选关键字"></Input>
         </Col>
         <Col span="16" style="text-align:right">
           <!-- <Button type="primary" icon="ios-search">查询</Button> -->
@@ -15,7 +15,7 @@
         </Col>
     </Row>
     <hr class="line">
-    <Table size="small" ref="table" :loading="loading" :columns="columns" :data="tableData"></Table>
+    <Table size="small" ref="table" :loading="loading" :columns="columns" :data="searchData"></Table>
     <div style="float: right;padding: 12px 0 0 0 ">
       <Page :total="totalNum" @on-change="onChangePage" show-total></Page>
     </div>
@@ -93,6 +93,7 @@
 
 <script>
 import axios from 'axios'
+import exportExcel from '../utlis'
 export default {
   name: 'Message',
   data () {
@@ -244,10 +245,25 @@ export default {
       replyWord: '',
       replyImgs: [],
       actLi: -1,
+      keyWord: ''
     }
   },
   created () {
     this.getTableData(1)
+  },
+  computed: {
+    searchData(){
+      var search =  this.keyWord
+      if(search){
+        return this.tableData.filter(function(item){
+          return Object.keys(item).some(function(key){
+            return String(item[key]).toLowerCase().indexOf(search) > -1
+          })
+        })
+      }else{
+        return this.tableData
+      }
+    }
   },
   methods: {
     getTableData (e) {
@@ -266,10 +282,15 @@ export default {
         })
     },
     exportData () {
-      this.$refs.table.exportCsv({
-        filename: '建议留言表',
-        original: false
+      var d = JSON.parse(JSON.stringify(this.tableData))
+      d.forEach(item => {
+        item.Reply = JSON.stringify(item.Reply)
+        item.Picture = JSON.stringify(item.Picture)
+        delete item._id
+        delete item.Openid
+        delete item.__v
       })
+      exportExcel(d, '投诉建议数据导出')
     },
     onChangePage (e) {
       this.getTableData(e)
