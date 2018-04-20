@@ -27,11 +27,12 @@
           <Row>
             <Col span="2">个人信息：</Col>
             <Col span="22">
-              <span class="msg-content">{{curData.Name}}</span>
-              <span class="msg-content">{{curData.Tel}}</span>
-              <span class="msg-content">{{curData.Type}}</span>
-              <span class="msg-content">{{curData.HouseName }}</span>
-              <span class="msg-content">{{curData.ProjectName }}</span>
+              <span class="msg-content">{{curData.Name}}</span>&nbsp;
+              <span class="msg-content">{{curData.Tel}}</span>&nbsp;
+              <span class="msg-content">{{curData.Type}}</span>&nbsp;
+              <span class="msg-content">{{curData.HouseName }}</span>&nbsp;
+              <span class="msg-content">{{curData.DoorNumber }}</span>&nbsp;
+              <span class="msg-content">{{curData.ProjectName }}</span>&nbsp;
               <span class="msg-content">{{curData.ProjectContent }}</span>&nbsp;&nbsp;
               <span class="msg-content">{{curData.Date }}</span>
             </Col>
