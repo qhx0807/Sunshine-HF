@@ -20,6 +20,10 @@
               <Input type="password" v-model="formItem.password" @on-enter="loginHandler" placeholder="密码"/>
             </FormItem>
             <FormItem>
+              <input class="logincode" type="text" v-model="formItem.code" placeholder="请输入验证码"/>
+              <a class="btncode" @click.stop="onClickSendCode">{{btntext}}</a>
+            </FormItem>
+            <FormItem>
               <Button type="info" :loading="loading" @click="loginHandler" long>登录</Button>
             </FormItem>
           </Form>
@@ -38,18 +42,43 @@ export default {
       loading: false,
       formItem: {
         name: '',
-        password: ''
-      }
+        password: '',
+        code: ''
+      },
+      btntext: '发送验证码',
+      issend: false,
+      timer: null
     }
+  },
+  computed: {
+
+  },
+  beforeDestroy () {
+    clearInterval(this.timer)
   },
   methods: {
     loginHandler () {
       if (!this.formItem.name) {
-        this.$Message.info('请输入用户名')
+        this.$Message.warning('请输入用户名')
         return false
       }
       if (!this.formItem.password) {
-        this.$Message.info('请输入用户密码')
+        this.$Message.warning('请输入用户密码')
+        return false
+      }
+      if (!this.formItem.code) {
+        this.$Message.warning('请输入验证码')
+        return false
+      }
+      let expression = localStorage.getItem('expression')
+      let code = localStorage.getItem('code')
+      let d = new Date().valueOf
+      if (Number(expression) <= d) {
+        this.$Message.warning('验证码已过期！')
+        return false
+      }
+      if (this.formItem.code != code) {
+        this.$Message.warning('验证码错误！')
         return false
       }
       this.loading = true
@@ -65,15 +94,50 @@ export default {
         if (response.data.Data) {
           sessionStorage.setItem('name', this.formItem.name)
           sessionStorage.setItem('id', response.data.Data._id)
+          this.$Message.success('登录成功！')
+          localStorage.removeItem('code')
+          localStorage.removeItem('expression')
           this.$router.replace({name: 'Message'})
         } else {
-          this.$Message.info('用户名或密码错误！')
+          this.$Message.warning('用户名或密码错误！')
         }
       }).catch(error => {
         this.loading = false
-        this.$Message.info('登录失败，请检查网络！')
+        this.$Message.error('登录失败，请检查网络！')
         console.log(error)
       })
+    },
+    onClickSendCode () {
+      if (!this.formItem.name) {
+        this.$Message.warning('请先输入用户名！')
+        return false
+      }
+      if (this.issend) {return false}
+      axios.get(apiUrl + '/logincode?name=' + this.formItem.name)
+        .then(response => {
+          console.log(response)
+          if (response.data.code) {
+            localStorage.setItem('code', response.data.code)
+            localStorage.setItem('expression', response.data.expression)
+            this.issend = true
+            var time = 120
+            this.timer = setInterval(() => {
+              if (time>0) {
+                time -= 1
+                this.btntext = `${time}s后重新发送`
+              } else {
+                this.issend = false
+                this.btntext = '发送验证码'
+              }
+            }, 1000)
+          } else {
+            this.$Message.warning(response.data.msg)
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          this.$Message.error('操作失败，请检查网络！')
+        })
     }
   }
 }
@@ -140,6 +204,20 @@ export default {
               padding: 10px 0 20px;
             }
         }
+    }
+    .logincode{
+      border: none;
+      outline: none;
+      border-bottom: 1px solid #ddd;
+      width: 100%;
+      &:focus{
+        border-bottom: 1px solid skyblue;
+      }
+    }
+    .btncode{
+      position: absolute;
+      right: 10px;
+      top: 3px;
     }
   }
 }

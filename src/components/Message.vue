@@ -156,9 +156,14 @@ export default {
                   },
                   on: {
                     click: () => {
-                      this.seeImage(item.path)
+                      // this.seeImage(item.path)
                     }
-                  }
+                  },
+                  directives: [
+                    {
+                      name: 'imgview'
+                    }
+                  ]
                 })
               })
             )
