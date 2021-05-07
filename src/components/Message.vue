@@ -124,6 +124,14 @@ export default {
           width: 100
         },
         {
+          title: '项目名称',
+          key: 'HouseName',
+          width: 100,
+          render: (h, params) => {
+            return h('div', { }, params.row.HouseName || params.row.MarketName || params.row.ProjectName);
+          }
+        },
+        {
           title: '姓名/电话',
           key: 'Name',
           width: 120,
@@ -137,7 +145,8 @@ export default {
         },
         {
           title: '内容',
-          key: 'Content'
+          key: 'Content',
+          minWidth: 400,
         },
         {
           width: 140,
@@ -172,8 +181,14 @@ export default {
         {
           title: '回复',
           key: 'Reply',
+          minWidth: 400,
           render: (h, params) => {
             return h('div',
+            {
+              style: {
+                padding: '10px'
+              }
+            },
             params.row.Reply.map(item => {
               return h('p', {
                 domProps: {
@@ -199,7 +214,7 @@ export default {
           title: '操作',
           key: '_id',
           align: 'center',
-          width: 160,
+          width: 200,
           render: (h, params) => {
             return h('div', [
               h('Button', {
@@ -221,12 +236,26 @@ export default {
                     type: 'error',
                     size: 'small'
                   },
+                  style: {
+                    marginRight: '5px'
+                  },
                   on: {
                     click: () => {
                       this.remove(params)
                     }
                   }
-              }, '删除')
+              }, '删除'),
+              params.row.Status === '待处理' && h('Button', {
+                  props: {
+                    type: 'success',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.changeStatus(params)
+                    }
+                  }
+              }, '已处理')
             ]);
           }
         },
@@ -251,7 +280,8 @@ export default {
       replyWord: '',
       replyImgs: [],
       actLi: -1,
-      keyWord: ''
+      keyWord: '',
+      page: 1
     }
   },
   created () {
@@ -299,6 +329,7 @@ export default {
       exportExcel(d, '投诉建议数据导出')
     },
     onChangePage (e) {
+      this.page = e;
       this.getTableData(e)
     },
     replyMsg (e) {
@@ -342,8 +373,26 @@ export default {
           axios.delete(apiUrl + '/messages?id=' + e.row._id)
             .then(response => {
               if(response.data.OK === 'ok'){
-                this.getTableData(1)
+                this.getTableData(this.page)
                 this.$Message.success('已删除！')
+              }
+            })
+            .catch(error => {
+              console.log(error)
+            })
+        }
+      })
+    },
+    changeStatus(e) {
+      this.$Modal.confirm({
+        title: '提示',
+        content: '<p>将此条记录标记为已处理？</p>',
+        onOk: () => {
+          axios.post(apiUrl + '/changeStatus', {id: e.row._id})
+            .then(response => {
+              if(response.data.OK === 'ok'){
+                this.getTableData(this.page)
+                this.$Message.success('操作成功！')
               }
             })
             .catch(error => {
